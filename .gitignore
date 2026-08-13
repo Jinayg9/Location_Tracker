@@ -5,6 +5,7 @@ status.json
 
 # Tracking Data (Do not expose your physical location!)
 *.csv
+!tracking_log.example.csv
 tracking_log.csv
 
 # Python
