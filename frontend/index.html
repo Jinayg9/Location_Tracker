@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BLE Smart Tracker - Leaflet PoC</title>
+    <!-- Leaflet CSS -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin=""/>
+    <link rel="stylesheet" href="style.css">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="glass-panel">
+        <header>
+            <h1>BLE Smart Tracker</h1>
+            <p>Live Path Visualization via Google Find My Network</p>
+        </header>
+        
+        <div class="stats-container">
+            <div class="stat-box">
+                <span class="stat-label">Total Pings</span>
+                <span class="stat-value" id="ping-count">--</span>
+            </div>
+            <div class="stat-box">
+                <span class="stat-label">Last Updated</span>
+                <span class="stat-value" id="last-updated">--</span>
+            </div>
+            <div class="stat-box">
+                <span class="stat-label">Network Last Seen</span>
+                <span class="stat-value" id="network-last-seen" style="color: #ff9f43;">--</span>
+            </div>
+            <div class="stat-box">
+                <span class="stat-label">Status</span>
+                <span class="stat-value status-active">● Active</span>
+            </div>
+        </div>
+        
+        <div style="text-align: right; margin-bottom: 15px;">
+            <button id="clear-map-btn" style="background-color: #ff4757; color: white; border: none; padding: 8px 16px; border-radius: 6px; cursor: pointer; font-weight: bold;">Clear Map Data</button>
+        </div>
+
+        <div id="map-container">
+            <!-- Map will be rendered here -->
+            <div id="map"></div>
+        </div>
+    </div>
+
+    <!-- Leaflet JS -->
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+    <!-- PapaParse for CSV reading -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.4.1/papaparse.min.js"></script>
+    <!-- App Logic -->
+    <script src="app.js?v=6"></script>
+</body>
+</html>
