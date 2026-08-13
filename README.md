@@ -66,5 +66,5 @@ pip install -r requirements.txt
 - **Resolution:** 
   1. **Chronological Sorting:** The frontend script (`app.js`) now explicitly sorts all data points by `timestamp` ascending.
   2. **Strict Route Filtering:** The continuous polyline path now aggressively filters out high-inaccuracy spikes (`accuracy > 100m`) AND owner-phone reports (`is_own_report === true`).
-  3. **Data Transparency (Clickable Markers):** To ensure no data is hidden, ALL 190+ raw pings are still plotted as interactive `L.circleMarker` elements. Valid path points are colored **Blue**, while ignored/filtered points (inaccurate or phone-based) are colored **Red**. Every marker is clickable to display its full metadata popup.
+  3. **Data Transparency (Clickable Markers):** To ensure no data is hidden, ALL raw pings are still plotted as interactive `L.circleMarker` elements. Valid path points are colored **Blue**, while ignored/filtered points (inaccurate or phone-based) are colored **Red**. Every marker is clickable to display its full metadata popup.
   4. **Cache Control:** Implemented script versioning (`app.js?v=6`) to ensure the client browser forcibly updates without clearing cache.
