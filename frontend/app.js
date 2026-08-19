@@ -1,6 +1,7 @@
 // Initialize Leaflet Map
 // Using a dark theme tile layer to match the glassmorphism UI
-const map = L.map('map').setView([19.0760, 72.8777], 14);
+// Using preferCanvas for massive performance boost on 10,000+ pings
+const map = L.map('map', { preferCanvas: true }).setView([19.0760, 72.8777], 14);
 
 L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', {
     attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attributions">CARTO</a>',
@@ -79,8 +80,11 @@ function processTrackingData(data) {
         document.getElementById('last-updated').innerText = lastTime;
     }
 
+    // Limit to the last 300 points for map rendering to prevent browser lag
+    let renderedPoints = allPoints.slice(-300);
+
     // Filter out points with very poor accuracy and 'is_own_report' for the PATH ONLY
-    let pathPoints = allPoints.filter(d => (!d.accuracy || d.accuracy <= 100) && d.is_own_report !== true);
+    let pathPoints = renderedPoints.filter(d => (!d.accuracy || d.accuracy <= 100) && d.is_own_report !== true);
 
     // Extract coordinates for Polyline from pathPoints
     const latlngs = pathPoints.map(p => [p.latitude, p.longitude]);
@@ -99,12 +103,12 @@ function processTrackingData(data) {
         map.fitBounds(path.getBounds(), { padding: [50, 50] });
     } else if (latlngs.length > 0) {
         map.setView(latlngs[0], 15);
-    } else if (allPoints.length > 0) {
-        map.setView([allPoints[allPoints.length - 1].latitude, allPoints[allPoints.length - 1].longitude], 15);
+    } else if (renderedPoints.length > 0) {
+        map.setView([renderedPoints[renderedPoints.length - 1].latitude, renderedPoints[renderedPoints.length - 1].longitude], 15);
     }
 
-    // Add Markers for ALL points
-    allPoints.forEach((point, index) => {
+    // Add Markers for rendered points
+    renderedPoints.forEach((point, index) => {
         const time = new Date(point.timestamp * 1000).toLocaleString();
         const popupContent = `
             <span class="popup-time">${time}</span>
@@ -118,10 +122,10 @@ function processTrackingData(data) {
         if (index === 0) {
             L.marker([point.latitude, point.longitude], {icon: startIcon})
                 .addTo(map)
-                .bindPopup(`<b>Start</b><br>${popupContent}`);
+                .bindPopup(`<b>Start (Last 300 Pings)</b><br>${popupContent}`);
         } 
         // End point
-        else if (index === allPoints.length - 1) {
+        else if (index === renderedPoints.length - 1) {
             L.marker([point.latitude, point.longitude], {icon: endIcon})
                 .addTo(map)
                 .bindPopup(`<b>Current Location</b><br>${popupContent}`)
