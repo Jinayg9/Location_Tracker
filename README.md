@@ -67,4 +67,10 @@ pip install -r requirements.txt
   1. **Chronological Sorting:** The frontend script (`app.js`) now explicitly sorts all data points by `timestamp` ascending.
   2. **Strict Route Filtering:** The continuous polyline path now aggressively filters out high-inaccuracy spikes (`accuracy > 100m`) AND owner-phone reports (`is_own_report === true`).
   3. **Data Transparency (Clickable Markers):** To ensure no data is hidden, ALL raw pings are still plotted as interactive `L.circleMarker` elements. Valid path points are colored **Blue**, while ignored/filtered points (inaccurate or phone-based) are colored **Red**. Every marker is clickable to display its full metadata popup.
-  4. **Cache Control:** Implemented script versioning (`app.js?v=6`) to ensure the client browser forcibly updates without clearing cache.
+  4. **Cache Control:** Implemented script versioning (`app.js?v=8`) to ensure the client browser forcibly updates without clearing cache.
+
+#### Phase 6: Map Rendering Scalability & UI Time Filters
+- **Challenge - Browser DOM Memory Crash:** As the tracking log exceeded 5,000 pings, Leaflet's default SVG renderer began severely lagging the browser DOM. Rendering 50,000+ points would result in a hard browser crash (Out of Memory), especially on mobile devices.
+- **Resolution:**
+  1. **Canvas Renderer Upgrade:** Added `{ preferCanvas: true }` to the Leaflet map initialization. By drawing raw shapes to an HTML5 Canvas instead of creating thousands of individual SVG DOM nodes, the map can now effortlessly render 100,000+ pings.
+  2. **UI Time Filters:** Added dynamic filter buttons (`Today`, `Last 7 Days`, `All Time`) to the frontend. The system still downloads the full CSV, but automatically filters points based on the Unix timestamp before rendering. The map defaults to `Last 7 Days` to ensure immediate load times while preserving the ability to inspect long-term historical paths.
